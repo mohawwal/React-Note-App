@@ -26,7 +26,6 @@ export default function Notes({ notes, setDarkMode, darkMode }) {
     );
   }
 
-  React.useEffect(handleFilter, [text, notes]);
 
   const styles = {
     display: 'none',
