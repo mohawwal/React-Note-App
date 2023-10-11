@@ -1,29 +1,55 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FiSearch } from 'react-icons/fi'
 import {GrAdd} from 'react-icons/gr'
 import { Link } from 'react-router-dom'
 import AllNotes from '../component/AllNotes'
 
 
-export default function Notes({notes}) {
+export default function Notes({notes, setDarkMode, darkMode}) {
+  const [filterNotes, setFilterNotes] = React.useState(notes)
+  const [text, setText] = React.useState('')
+
+  function handleToggle() {
+    setDarkMode(prevDarkMode => !prevDarkMode)
+  }
+
+  const [search, setSearch] = React.useState(true)
+
+  function handleSearch() {
+    setSearch(prevSearch => !prevSearch)
+  }
+
+  function handleFilter() {
+    setFilterNotes(notes.filter((note) => {
+      return note.title.toLowerCase().includes(text.toLowerCase())
+    }))
+  }
+
+
+
+  React.useEffect(handleFilter, [text, notes])
+
+  const styles = {
+    display: 'none'
+  }
+
   return (
     <section className='notes'>
-      
       <div className='search-space'>
-        <h1>Note App</h1>
-        {/* <input className='search' type="search" /> */}
-        <FiSearch className='search-icon btn' />
+        {search ? <h1>Note App</h1> : <h1 style={styles}>Note App</h1> }
+        {search ? '' : <input  className='search' type="search" value={text} onChange={(e) => {setText(e.target.value); handleFilter()}} />}
+        <FiSearch className={darkMode ? 'btn darkMode' :'search-icon'} onClick={handleSearch} />
       </div>
         <div className='flip-space'>
-          <p className='light'>Light</p>
-          <div className='light-dark'>
-            <span className='span'></span>
+          <p className={darkMode ? 'darkMode light' :'light'}>Light</p>
+          <div onClick={handleToggle} className={darkMode ? 'light-dark darkMode' :'light-dark'}>
+            <span className={darkMode ? 'span darkMode' : 'span'}></span>
           </div>
-          <p className='dark'>Drak</p>
+          <p className={darkMode ? 'dark darkMode' :'dark'}>Dark</p>
         </div>
       <div className='allNote'>
         {
-          notes.map((note) => 
+          filterNotes.map((note) => 
             (<AllNotes 
               key={note.id}
               note={note}
