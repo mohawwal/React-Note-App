@@ -9,7 +9,7 @@ export default function Notes({ notes, setDarkMode, darkMode }) {
   const [text, setText] = React.useState('');
 
   function handleToggle() {
-    setDarkMode((prevDarkMode) => !prevDarkMode);
+    setDarkMode((prevDarkMode) => !prevDarkMode);1
   }
 
   const [search, setSearch] = React.useState(true);
